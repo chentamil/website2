@@ -140,43 +140,44 @@
 
     </div>
     <script>
-       document.addEventListener("DOMContentLoaded", async () => {
+        document.addEventListener("DOMContentLoaded", async () => {
 
-    const url = "https://opensheet.elk.sh/1PmqYry7OrIzqm9I0cR7rmcyXspDmmDQhjMkqKwXw59o/Sheet1";
-    const box = document.getElementById("ratebox");
+            // const url = "https://opensheet.elk.sh/1PmqYry7OrIzqm9I0cR7rmcyXspDmmDQhjMkqKwXw59o/Sheet1";
+            const url = "https://script.google.com/macros/s/AKfycbz6w2KgdL2ctrXykrxOpTi6Aus5F8xi7UqLymu0V84hjsXpWG2sEOoSS1cbohAffv0-/exec";
+            const box = document.getElementById("ratebox");
 
-    console.log("Script started");
+            try {
 
-    try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const rates = data[0];
 
-        const response = await fetch(url);
-        const data = await response.json();
+                const display = String(rates.display_rate).trim().toLowerCase();
 
-        console.log("Data:", data);
+                if (display === "yes") {
 
-        const rates = data[0];
+                    // Show box
+                    box.classList.remove("d-none");
 
-        console.log("rates =", rates);
-        console.log("display_rate raw =", rates.display_rate);
-        console.log("JSON =", JSON.stringify(rates.display_rate));
+                    // Fill values
+                    document.querySelector('[data-rate="gold"]').innerText = rates.gold_rate;
+                    document.querySelector('[data-rate="goldsdj"]').innerText = rates.gold_sdj_rate;
+                    document.querySelector('[data-rate="silver"]').innerText = rates.silver_rate;
+                    document.querySelector('[data-rate="silversdj"]').innerText = rates.silver_sdj_rate;
+                    document.querySelector('[data-rate="updated"]').innerText = rates.last_updated;
 
-        const display = String(rates.display_rate).trim().toLowerCase();
+                } else {
 
-        console.log("Processed =", display);
+                    // Hide box
+                    box.classList.add("d-none");
 
-        if (display === "yes") {
-            console.log("SHOW");
-            box.classList.remove("d-none");
-        } else {
-            console.log("HIDE");
-            box.classList.add("d-none");
-        }
+                }
 
-    } catch (e) {
-        console.error(e);
-    }
+            } catch (e) {
+                console.error(e);
+            }
 
-});
+        });
     </script>
 
     <style>
