@@ -140,37 +140,43 @@
 
     </div>
     <script>
-        (() => {
+       document.addEventListener("DOMContentLoaded", async () => {
 
-            const url = 'https://opensheet.elk.sh/1PmqYry7OrIzqm9I0cR7rmcyXspDmmDQhjMkqKwXw59o/Sheet1';
+    const url = "https://opensheet.elk.sh/1PmqYry7OrIzqm9I0cR7rmcyXspDmmDQhjMkqKwXw59o/Sheet1";
+    const box = document.getElementById("ratebox");
 
-            fetch(url)
-                .then(res => res.json())
-                .then(data => {
+    console.log("Script started");
 
-                    const rates = data[0];
-                    const ratebox = document.getElementById('ratebox');
+    try {
 
-                    // Show/Hide rate box
-                    if ((rates.display_rate || '').trim().toLowerCase() === 'yes') {
-                        ratebox.classList.remove('d-none');
-                    } else {
-                        ratebox.classList.add('d-none');
-                        return; // Stop here if hidden
-                    }
+        const response = await fetch(url);
+        const data = await response.json();
 
-                    // Fill values
-                    document.querySelector('[data-rate="gold"]').innerText = rates.gold_rate;
-                    document.querySelector('[data-rate="goldsdj"]').innerText = rates.gold_sdj_rate;
-                    document.querySelector('[data-rate="silver"]').innerText = rates.silver_rate;
-                    document.querySelector('[data-rate="silversdj"]').innerText = rates.silver_sdj_rate;
-                    document.querySelector('[data-rate="updated"]').innerText = rates.last_updated;
+        console.log("Data:", data);
 
-                })
-                .catch(err => console.error(err));
+        const rates = data[0];
 
-        })();
+        console.log("rates =", rates);
+        console.log("display_rate raw =", rates.display_rate);
+        console.log("JSON =", JSON.stringify(rates.display_rate));
 
+        const display = String(rates.display_rate).trim().toLowerCase();
+
+        console.log("Processed =", display);
+
+        if (display === "yes") {
+            console.log("SHOW");
+            box.classList.remove("d-none");
+        } else {
+            console.log("HIDE");
+            box.classList.add("d-none");
+        }
+
+    } catch (e) {
+        console.error(e);
+    }
+
+});
     </script>
 
     <style>
