@@ -149,7 +149,17 @@
                 .then(data => {
 
                     const rates = data[0];
+                    const ratebox = document.getElementById('ratebox');
 
+                    // Show/Hide rate box
+                    if ((rates.display_rate || '').trim().toLowerCase() === 'yes') {
+                        ratebox.classList.remove('d-none');
+                    } else {
+                        ratebox.classList.add('d-none');
+                        return; // Stop here if hidden
+                    }
+
+                    // Fill values
                     document.querySelector('[data-rate="gold"]').innerText = rates.gold_rate;
                     document.querySelector('[data-rate="goldsdj"]').innerText = rates.gold_sdj_rate;
                     document.querySelector('[data-rate="silver"]').innerText = rates.silver_rate;
@@ -160,6 +170,7 @@
                 .catch(err => console.error(err));
 
         })();
+
     </script>
 
     <style>
